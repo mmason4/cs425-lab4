@@ -4,6 +4,8 @@ import com.opencsv.CSVReader;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.StringReader;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import org.json.simple.JSONObject;
@@ -108,16 +110,27 @@ public class Rates {
             JSONObject json = new JSONObject();
             JSONObject rates = new JSONObject();            
             
-            /* 
-             * Add rate data to "rates" container and add "date" and "base"
-             * values to "json" container.  See the "getRatesAsTable()" method
-             * for an example of how to get the CSV data from the list, and
-             * don't forget to skip the header row!
-             *
-             * *** INSERT YOUR CODE HERE ***
-             */
-            
+            boolean first = true;
+       
+            while(iterator.hasNext()){
+                if(first) {
+                    iterator.next();
+                    row = iterator.next();
+                    double numRate = Double.parseDouble(row[2]);
+                    rates.put(row[1], numRate);
+                    first = false;
+                }
+                else{
+                    row = iterator.next();
+                    double numRate = Double.parseDouble(row[2]);
+                    rates.put(row[1], numRate);
+                }
+            }
             json.put("rates", rates);
+            Date date = new Date();
+            String presentDate = new SimpleDateFormat("yyyy-MM-dd").format(date);
+            json.put("date", presentDate);
+            json.put("base", "USD");
             
             /* Parse top-level container to a JSON string */
             
@@ -127,6 +140,8 @@ public class Rates {
         catch (Exception e) { System.err.println( e.toString() ); }
         
         /* Return JSON string */
+        /*Snellen added this line */
+        System.err.println(results);
         
         return (results.trim());
         
