@@ -4,35 +4,30 @@ var Lab4 = ( function() {
 
         convert: function(rates) {
             
-            /*
-             * This function accepts the data object sent by the server
-             * ("rates") as an argument.  It should: get the amount (in USD)
-             * entered by the user in the "input" form field, iterate through
-             * the currency exchange rates given in the data object, multiply
-             * each rateby the given number of U.S. Dollars, and compute the
-             * corresponding amount for each currency.  These amounts should be
-             * shown in the "output" element of the page, along with the
-             * currency codes, separated by colons and formatted to two decimal
-             * places.  (See the screenshot given with this assignment.)
-             */
-
-            // INSERT YOUR CODE HERE
+            var userInput = $("#input").val();
+            
+            if(userInput.length == 0 || isNaN(userInput)) {
+                alert("Invalid entry in the textbox!");
+                return false;
+            }
+            else{
+                var userNum = Number(userInput);
+            }
+            
+            var presentDate = rates.date;
+            var rates = rates.rates;
+            for (var key in rates) {
+                if (rates.hasOwnProperty(key)) {
+                  var val = rates[key];
+                  var roundedNum = (val * userNum).toFixed(2);
+                  $("#output").append(key + " " + roundedNum + "</br>");
+                }
+              }
+              $("#output").append("Based on " + presentDate + " exchange rates");
 
         },
         
         getConversion: function() {
-            
-            /*
-             * This method should send an Ajax request to our API to get the
-             * latest exchange rates.  Use "latest" as the URL and "json" as the
-             * data type, so that the data will be automatically parsed to a
-             * JavaScript object.  (In the sample code in the "HTTP Basics"
-             * lecture notes, this object is called "response".  Then, invoke
-             * the helper function "convert()" in the callback function to 
-             * perform the conversion.  (If you are unclear about the purpose of
-             * the "that" variable shown here, see Page 6 of the "Functions and
-             * Objects" lecture notes.
-             */
             
             var that = this;
             
